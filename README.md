@@ -5,6 +5,29 @@ koja realizuje ELT (Extract, Load, Transform) pristup: sirovi podaci se alatom A
 učitavaju u PostgreSQL skladište bez izmena, a zatim se transformišu alatom dbt u
 analitičke tabele pogodne za izveštavanje.
 
+## Uputstvo za pokretanje
+
+```
+git clone https://github.com/strahinjaobr/devops-cis-projekat.git
+cd devops-cis-projekat
+copy .env.primer .env
+docker compose up -d
+```
+
+Zatim preuzeti [Olist CSV fajlove](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce)
+u folder `data/` i izvršiti Airbyte sinhronizaciju (podešavanje opisano u odeljku 6),
+pa pokrenuti transformacije:
+
+```
+pip install dbt-postgres
+cd dbt/olist_dwh
+dbt run --profiles-dir .
+dbt test --profiles-dir .
+```
+
+Očekivani ishod: 11 izgrađenih modela, 36 testova, PASS=36, ERROR=0.
+Detaljna verzija uputstva nalazi se u odeljku 5.
+
 ## 1. Arhitektura
 
 Sistem čine tri komponente:
