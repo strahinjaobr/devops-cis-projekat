@@ -1,0 +1,57 @@
+version: 2
+
+models:
+  - name: fct_porudzbine
+    description: "Cinjenicna tabela - jedna porudzbina po redu, sa svim metrikama"
+    columns:
+      - name: id_porudzbine
+        description: "Primarni kljuc"
+        tests:
+          - unique
+          - not_null
+      - name: id_kupca
+        tests:
+          - not_null
+      - name: ukupna_vrednost
+        tests:
+          - not_null
+
+  - name: mart_mesecna_prodaja_po_kategoriji
+    description: "Mesecna prodaja po kategoriji proizvoda"
+    columns:
+      - name: mesec
+        tests:
+          - not_null
+      - name: kategorija
+        tests:
+          - not_null
+      - name: ukupan_prihod
+        tests:
+          - not_null
+
+  - name: mart_prodaja_po_drzavi
+    description: "Geografska analiza prodaje po drzavama kupaca"
+    columns:
+      - name: drzava
+        tests:
+          - unique
+          - not_null
+
+  - name: mart_nacini_placanja
+    description: "Analiza nacina placanja"
+    columns:
+      - name: nacin_placanja
+        tests:
+          - unique
+          - not_null
+
+  - name: mart_kljucne_metrike
+    description: "KPI tabela sa 16 kljucnih metrika poslovanja"
+    columns:
+      - name: metrika
+        tests:
+          - unique
+          - not_null
+      - name: vrednost
+        tests:
+          - not_null

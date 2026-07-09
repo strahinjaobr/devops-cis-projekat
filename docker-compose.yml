@@ -1,0 +1,36 @@
+
+
+services:
+  skladiste:
+    image: postgres:16-alpine
+    container_name: skladiste_postgres
+    restart: unless-stopped
+    # ako se setis promeni da se ne pise svaka varijabla posebno nego ono samo .env
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    volumes:
+      - dwh_podaci:/var/lib/postgresql/data
+      - ./init/01_seme.sql:/docker-entrypoint-initdb.d/01_seme.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # uradjeno pomocu sftp zbog problema sa local file sistemom i airbyte-om
+  fajl_server:
+    image: atmoz/sftp:alpine
+    container_name: fajl_server_sftp
+    restart: unless-stopped
+    command: "${SFTP_USER}:${SFTP_PASSWORD}:::data"
+    ports:
+      - "2222:22"
+    volumes:
+      - ./data:/home/${SFTP_USER}/data:ro
+
+volumes:
+  dwh_podaci:

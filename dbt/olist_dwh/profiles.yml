@@ -1,0 +1,12 @@
+olist_dwh:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: "{{ env_var('POSTGRES_HOST', 'localhost') }}"
+      port: "{{ env_var('POSTGRES_PORT', '5433') | int }}"
+      user: "{{ env_var('POSTGRES_USER', 'student') }}"
+      password: "{{ env_var('POSTGRES_PASSWORD', 'lozinka123') }}"
+      dbname: "{{ env_var('POSTGRES_DB', 'skladiste') }}"
+      schema: staging
+      threads: 4

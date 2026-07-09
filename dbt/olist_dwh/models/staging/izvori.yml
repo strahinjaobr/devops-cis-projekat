@@ -1,0 +1,22 @@
+version: 2
+
+sources:
+  - name: raw_data
+    description: "Sirovi podaci iz Olist CSV fajlova, ucitani Airbyte-om bez izmena"
+    database: "{{ env_var('POSTGRES_DB', 'skladiste') }}"
+    schema: raw_data
+    tables:
+      - name: kupci
+        description: "olist_customers_dataset.csv - podaci o kupcima"
+      - name: porudzbine
+        description: "olist_orders_dataset.csv - porudzbine i njihovi statusi"
+      - name: stavke_porudzbine
+        description: "olist_order_items_dataset.csv - pojedinacne stavke porudzbina"
+      - name: proizvodi
+        description: "olist_products_dataset.csv - katalog proizvoda"
+      - name: placanja
+        description: "olist_order_payments_dataset.csv - nacini placanja"
+      - name: ocene
+        description: "olist_order_reviews_dataset.csv - recenzije/ocene kupaca"
+      - name: prevod_kategorija
+        description: "product_category_name_translation.csv - prevod kategorija na engleski"

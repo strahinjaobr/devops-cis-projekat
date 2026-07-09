@@ -1,0 +1,100 @@
+version: 2
+
+models:
+  - name: stg_kupci
+    description: "Ocisceni podaci o kupcima"
+    columns:
+      - name: id_kupca
+        description: "Primarni kljuc kupca"
+        tests:
+          - unique
+          - not_null
+      - name: jedinstveni_id_kupca
+        tests:
+          - not_null
+
+  - name: stg_porudzbine
+    description: "Ociscene porudzbine sa kastovanim datumima"
+    columns:
+      - name: id_porudzbine
+        description: "Primarni kljuc porudzbine"
+        tests:
+          - unique
+          - not_null
+      - name: id_kupca
+        description: "Strani kljuc ka stg_kupci"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_kupci')
+              field: id_kupca
+      - name: status_porudzbine
+        tests:
+          - accepted_values:
+              values:
+                - delivered
+                - shipped
+                - canceled
+                - invoiced
+                - processing
+                - unavailable
+                - approved
+                - created
+
+  - name: stg_stavke_porudzbine
+    description: "Stavke porudzbina sa cenama"
+    columns:
+      - name: id_porudzbine
+        description: "Strani kljuc ka stg_porudzbine"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_porudzbine')
+              field: id_porudzbine
+      - name: id_proizvoda
+        description: "Strani kljuc ka stg_proizvodi"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_proizvodi')
+              field: id_proizvoda
+      - name: cena
+        tests:
+          - not_null
+
+  - name: stg_proizvodi
+    description: "Katalog proizvoda sa prevedenim kategorijama"
+    columns:
+      - name: id_proizvoda
+        description: "Primarni kljuc proizvoda"
+        tests:
+          - unique
+          - not_null
+      - name: kategorija
+        tests:
+          - not_null
+
+  - name: stg_placanja
+    description: "Placanja porudzbina"
+    columns:
+      - name: id_porudzbine
+        tests:
+          - not_null
+      - name: iznos
+        tests:
+          - not_null
+
+  - name: stg_recenzije
+    description: "Recenzije kupaca (jedna po porudzbini)"
+    columns:
+      - name: id_porudzbine
+        description: "Posle uklanjanja duplikata - unikatno"
+        tests:
+          - unique
+          - not_null
+      - name: ocena
+        tests:
+          - not_null
+          - accepted_values:
+              values: [1, 2, 3, 4, 5]
+              quote: false
